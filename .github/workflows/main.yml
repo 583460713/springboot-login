@@ -1,0 +1,23 @@
+name: Schedule Worker
+on:
+  schedule:
+  # 因为 Github 是国际网站，默认时区是 UTC 时间（协调世界时间），大致时间是冰岛和英国的时区。UTC 比北京时间慢 8 小时，用目标时间减 8 就可以了
+    - cron: '* 10 * * *' #每日18执行任务，注意时区，不可更改，
+jobs:
+  work:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3 # 检出代码到工作目录
+
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin' # 或者使用 'zulu', 'adopt', 'corretto'
+        java-version: '17' # 根据您的需求选择Java版本
+
+    - name: Compile Java
+      run: |        javac SportUtils.java # 替换为您的主Java类文件名
+
+    - name: Run Java Program
+      run: |        java SportUtils # 同样替换为您的主Java类名
